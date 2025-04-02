@@ -1,0 +1,72 @@
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WpfApp6;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+    public enum Figury { Kwadrat, Koło, Trójkąt, Prostokąt }
+
+    private Figury[] figury = new Figury[5];
+
+    private void btnLosuj_Click(object sender, RoutedEventArgs e)
+    {
+        var rand = new Random();
+        for (int i = 0; i < figury.Length; i++)
+        {
+            figury[i] = (Figury)rand.Next(0, 4);
+        }
+        var rand1 = new Random();
+        int index = rand1.Next(0, figury.Length);
+        MessageBox.Show("Wylosowano " + figury[index]);
+    }
+
+    private void Statystyka(out double suma, out double srednia, params double[] dane)
+    {
+        suma = 0;
+        for (int i = 0; i < dane.Length; i++)
+            suma += dane[i];
+        srednia = dane.Length > 0 ? suma / dane.Length : 0;
+    }
+    private void btnStatystyka_Click(object sender, RoutedEventArgs e)
+    {
+        double suma, srednia;
+        double[] dane = { 4.2, 2.3, 33, 5.9, 11 };
+
+        Statystyka(out suma, out srednia, dane);
+
+        lblSuma.Content = suma.ToString("F2");
+        lblSrednia.Content = srednia.ToString("F2");
+    }
+
+    private void btnTablica_Click(object sender, RoutedEventArgs e)
+    {
+        int[,] tablica = new int[4, 4];
+        int licznik = 1;
+
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                tablica[i, j] = licznik++;
+
+        listBoxKolumna.Items.Clear();
+        for (int i = 0; i < 4; i++)
+        {
+            listBoxKolumna.Items.Add(tablica[i, 2]); // trzecia kolumna
+        }
+    }
+}
