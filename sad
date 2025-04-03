@@ -1,0 +1,114 @@
+﻿using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WpfApp1
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void btnOblicz_Click(object sender, RoutedEventArgs e)
+        {
+            double r, h, V=0, Pole=0;
+
+            try
+            {
+
+
+                r = Convert.ToDouble(txtPromień.Text);
+                h = Convert.ToDouble(txtwysokossc.Text);
+
+                if (r > 0 && h > 0)
+                {
+                    if (chkObliczanieObletosci.IsChecked == true)
+                    {
+
+                        switch (cbxRodzajBryly.SelectedIndex)
+                        {
+                            case 0:
+                                V = Math.PI * Math.Pow(r, 2) * h;
+                                Pole = Math.PI * r * (h + r);
+                                break;
+                            case 1:
+                                V = 1.0 / 3.0 * Math.PI * Math.Pow(r, 2) *
+                                    h;
+                                Pole = Math.PI * r * r + Math.PI *
+                                       Math.Sqrt(Math.Pow(h, 2) + Math.Pow(r, 2));
+                                break;
+                            case 2:
+                                V = 4.0 / 3.0 * Math.PI * Math.Pow(r, 3);
+                                Pole = Math.PI * Math.Pow(r, 2);
+                                break;
+                            default:
+                                throw new NotImplementedException();
+
+                        }
+
+                        lblObjetosc.Content = $"Objętość wynosi {V:F2}";
+                    }
+                    if (chkObliczaniePola.IsChecked == true)
+                    {
+
+                        switch (cbxRodzajBryly.SelectedIndex)
+                        {
+                            case 0:
+
+                                Pole = Math.PI * r * (h + r);
+                                break;
+                            case 1:
+
+                                Pole = Math.PI * r * r + Math.PI * Math.Sqrt(Math.Pow(h, 2) + Math.Pow(r, 2));
+                                break;
+                            case 2:
+
+                                Pole = Math.PI * Math.Pow(r, 2);
+                                break;
+                            default:
+                                throw new NotImplementedException();
+
+                        }
+                    }
+                    lblPole.Content = $"Pole wynosi {Pole:F2}";
+
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show("zlu wormat");
+            }
+        }
+
+        private void cbxRodzajBryly_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(cbxRodzajBryly.SelectedIndex == 2)
+            {
+                txtwysokossc.Visibility= Visibility.Hidden;
+            }
+            else
+            {
+                txtwysokossc.Visibility =   Visibility.Visible;
+            }
+        }
+
+        private void btnZamknij_Click(object sender, RoutedEventArgs e)
+        {
+            if(MessageBox.Show("Czy jestes pewien?","Zamykanie",MessageBoxButton.YesNo)==MessageBoxResult.Yes)
+            this.Close();
+        }
+    }
+}
